@@ -61,6 +61,10 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.example.towerdefense/com.example.towerdefense.HelloApplication</mainClass>
+                            <options>
+                                <option>--enable-native-access=javafx.graphics</option>
+                            </options>
+                            <mainClass>com.example.dino/com.example.dino.App</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
