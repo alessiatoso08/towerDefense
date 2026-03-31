@@ -31,7 +31,7 @@ public class App extends Application {
         timer.start();
 
         stage.setScene(new Scene(root, 800, 600));
-        stage.setTitle("Dino Game");
+        stage.setTitle("Tower defense");
         stage.show();
     }
 
