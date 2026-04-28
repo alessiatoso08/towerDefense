@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="App" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.example.dino.App" />
-    <module name="ProvaFX" />
+    <module name="DinoGame" />
     <option name="VM_PARAMETERS" value="--enable-native-access=javafx.graphics" />
     <extension name="coverage">
       <pattern>
