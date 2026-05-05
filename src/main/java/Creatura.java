@@ -1,3 +1,4 @@
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class Creatura {
@@ -12,5 +13,15 @@ public class Creatura {
         this.spriteSheet = img;
     }
 
+    public void update(){
+        x += velocita;
+        if(System.currentTimeMillis() % 120 == 0){ //ogni 120 millisecondi fai qualcosa
+            frameAttuale = (frameAttuale + 1) % 4;
+        }
+    }
+
+    public void draw(GraphicsContext gc){
+        gc.drawImage(spriteSheet, frameAttuale * SpriteConfig);
+    }
 
 }
