@@ -3,7 +3,7 @@ package com.example.demo;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public abstract class Creatura {
+public abstract class Creatura { //prova
     protected double x, y, velocita;
     protected double purificazione = 0;
     protected int frameAttuale = 0;
