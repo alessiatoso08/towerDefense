@@ -28,16 +28,16 @@ public class Bullet {
         }
     }
 
-    public void draw(GraphicsContext gc){
+    public void draw(GraphicsContext gc) {
         gc.save();
-        gc.translate(x,y);
+        gc.translate(x, y);
         gc.rotate(Math.toDegrees(angle));
         gc.setFill(Color.BURLYWOOD);
         gc.fillRect(-12, -1.5, 16, 3);
         gc.setFill(Color.DARKGOLDENROD);
-        gc.fillPolygon(new double[]{4, 12, 4}, new double[]{-4, 0, 4}, 3);
-        gc.setFill(Color.web("#fff8", 0.6));
-        gc.fillPolygon(new double[]{-12, -6, -12}, new double[]{-3, 0, 3}, 3);
+        gc.fillPolygon(new double[]{4,12,4}, new double[]{-4,0,4}, 3);
+        gc.setFill(Color.web("#fff8",0.6));
+        gc.fillPolygon(new double[]{-12,-6,-12}, new double[]{-3,0,3}, 3);
         gc.restore();
     }
 
