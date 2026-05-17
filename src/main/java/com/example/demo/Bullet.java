@@ -28,7 +28,7 @@ public class Bullet {
         }
     }
 
-    public void draw(GrapicsContext gc){
+    public void draw(GraphicsContext gc){
         gc.save();
         gc.translate(x,y);
         gc.rotate(Math.toDegrees(angle));
