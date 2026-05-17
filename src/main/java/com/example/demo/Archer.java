@@ -30,28 +30,38 @@ public class Archer {
     }
 
     public void update(List<Enemy> enemies) {
-        if (dead) return;
+        if (dead){
+            return;
+        }
         shootAnim.update();
-
-        if (arrowsLeft <= 0) { dead = true; return; }
-
+        if (arrowsLeft <= 0) {
+            dead = true;
+            return;
+        }
         long now = System.currentTimeMillis();
         if (now - lastShot > SHOOT_INTERVAL) {
-            // Nemico più vicino alla torre (x minima)
-            Enemy target = enemies.stream()
-                    .filter(e -> !e.isDead())
-                    .min((a, b) -> Double.compare(a.x, b.x))
-                    .orElse(null);
+            Enemy target = null;
+            for (int i = 0; i < enemies.size(); i++) {
+                Enemy e = enemies.get(i);
+                if (e.isDead()) {
+                    continue;
+                }
+                if (target == null) {
+                    target = e;
+                } else if (e.x < target.x) {
+                    target = e;
+                }
+            }
             if (target != null) {
-                bullets.add(new Bullet(x + W/2, y + H/2,
-                        target.getCenterX(), target.getCenterY()));
+                bullets.add(new Bullet(x + W / 2, y + H / 2, target.getCenterX(), target.getCenterY()));
                 arrowsLeft--;
                 lastShot = now;
             }
         }
-
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).update();
+        }
         bullets.removeIf(b -> b.dead);
-        bullets.forEach(Bullet::update);
     }
 
     public void draw(GraphicsContext gc) {
