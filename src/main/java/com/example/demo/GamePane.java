@@ -151,99 +151,114 @@ public class GamePane extends Pane {
     private void onMouseClicked(MouseEvent e) {
         if (gameState != GameState.PLAYING) return;
 
-        double mx = e.getX(), my = e.getY();
+        double mx = e.getX();
+        double my = e.getY();
+
         boolean onTower = mx >= TOWER_X1 && mx <= TOWER_X2 && my >= TOWER_Y1 && my <= TOWER_Y2;
 
-        if (onTower) {
-            if (monete >= COSTO_ARCIERE) {
-                monete -= COSTO_ARCIERE;
-                double ax = mx - Archer.W / 2;
-                double ay = my - Archer.H / 2;
-                archers.add(new Archer(ax, ay, lucciolaShootImg));
-                princess.triggerCast();
-                popups.add(new MoneyPopup("-" + COSTO_ARCIERE, mx, my - 20, Color.ORANGERED));
-                feedback = "✨ Lucciola evocata!   " + monete;
-            } else {
-                feedback = " Servono " + COSTO_ARCIERE + "  (hai " + monete + ")";
-            }
-        } else {
-            feedback = "Clicca sulla TORRE  (costo: " + COSTO_ARCIERE + ")";
+        if (!onTower) {
+            feedback = "Clicca sulla TORRE (costo: " + COSTO_ARCIERE + ")";
+            feedbackTime = System.currentTimeMillis();
+            return;
         }
 
+        if (monete < COSTO_ARCIERE) {
+            feedback = "Servono " + COSTO_ARCIERE + " (hai " + monete + ")";
+            feedbackTime = System.currentTimeMillis();
+            return;
+        }
+
+        monete -= COSTO_ARCIERE;
+
+        double ax = mx - Archer.W / 2;
+        double ay = my - Archer.H / 2;
+
+        archers.add(new Archer(ax, ay, lucciolaShootImg));
+        princess.triggerCast();
+
+        popups.add(new MoneyPopup("-" + COSTO_ARCIERE, mx, my - 20, Color.ORANGERED));
+
+        feedback = "✨ Lucciola evocata!   " + monete;
         feedbackTime = System.currentTimeMillis();
     }
 
     private void update() {
+
         if (gameState == GameState.NEXT_LEVEL) {
+
             if (System.currentTimeMillis() - stateTime > 2500) {
                 monete += BONUS_LIVELLO;
                 initLevel(level + 1);
             }
+
             return;
         }
 
-        if (gameState != GameState.PLAYING) return;
+        if (gameState != GameState.PLAYING){
+            return;
+        }
 
         princess.update();
         spawnEnemies();
 
         List<Bullet> allBullets = new ArrayList<>();
-        archers.forEach(a -> allBullets.addAll(a.bullets));
 
-        archers.forEach(a -> a.update(enemies));
+        for (int i = 0; i < archers.size(); i++) {
+            Archer a = archers.get(i);
+            allBullets.addAll(a.bullets);
+            a.update(enemies);
+        }
+ì
         archers.removeIf(a -> a.dead);
-
-        enemies.forEach(Enemy::update);
-
-        for (Enemy en : enemies) {
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).update();
+        }
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy en = enemies.get(i);
             if (en.isDone()) {
                 gameState = GameState.LOSE;
                 stateTime = System.currentTimeMillis();
                 return;
             }
         }
-
-        for (Bullet b : allBullets) {
-            if (b.dead) continue;
-
-            for (Enemy en : enemies) {
-                if (!en.isDead() && !en.isAttacking()
-                        && b.getBounds().intersects(en.getBounds())) {
+        for (int i = 0; i < allBullets.size(); i++) {
+            Bullet b = allBullets.get(i);
+            if (b.dead) {
+                continue;
+            }
+            for (int j = 0; j < enemies.size(); j++) {
+                Enemy en = enemies.get(j);
+                if (!en.isDead() && !en.isAttacking() && b.getBounds().intersects(en.getBounds())) {
                     b.dead = true;
                     en.hit();
                     break;
                 }
             }
         }
-
-        for (Enemy en : enemies) {
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy en = enemies.get(i);
             if (en.isJustKilled()) {
                 monete += RICOMPENSA_NEMICO;
-                popups.add(new MoneyPopup(
-                        "+" + RICOMPENSA_NEMICO,
-                        en.getCenterX() - 20,
-                        en.y - 10,
-                        Color.GOLD
-                ));
+                popups.add(new MoneyPopup("+" + RICOMPENSA_NEMICO, en.getCenterX() - 20, en.y - 10, Color.GOLD));
             }
         }
-
         enemies.removeIf(en -> en.isDead());
-        popups.forEach(MoneyPopup::update);
+        for (int i = 0; i < popups.size(); i++) {
+            popups.get(i).update();
+        }
         popups.removeIf(p -> !p.alive());
-
         if (enemiesSpawned >= totalEnemies && enemies.isEmpty() && !waitingLevelUp) {
             if (level < 4) {
                 gameState = GameState.NEXT_LEVEL;
-                stateTime = System.currentTimeMillis();
             } else {
                 gameState = GameState.WIN;
-                stateTime = System.currentTimeMillis();
             }
+            stateTime = System.currentTimeMillis();
         }
     }
 
     private void spawnEnemies() {
+
         if (enemiesSpawned >= totalEnemies) return;
 
         long now = System.currentTimeMillis();
@@ -252,16 +267,12 @@ public class GamePane extends Pane {
         lastSpawnMs = now;
 
         double y = GROUND_Y + rng.nextInt(10) - 5;
-
-        Enemy e = (rng.nextBoolean())
-                ? new Enemy(W + 10, y, "golem",
-                golemWalkImg, 9,
-                golemAttackImg, 6,
-                1.0, ATTACK_TRIGGER_X)
-                : new Enemy(W + 10, y - 4, "spirito",
-                spiritoWalkImg, 9,
-                spiritoAttackImg, 6,
-                1.4, ATTACK_TRIGGER_X);
+        Enemy e;
+        if (rng.nextBoolean()) {
+            e = new Enemy(W + 10, y, "golem", golemWalkImg, 9, golemAttackImg, 6, 1.0, ATTACK_TRIGGER_X);
+        } else {
+            e = new Enemy(W + 10, y - 4, "spirito", spiritoWalkImg, 9, spiritoAttackImg, 6, 1.4, ATTACK_TRIGGER_X);
+        }
 
         enemies.add(e);
         enemiesSpawned++;
