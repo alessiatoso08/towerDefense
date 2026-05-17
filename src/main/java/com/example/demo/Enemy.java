@@ -93,7 +93,7 @@ public class Enemy {
         if (isDead){
             return;
         }
-        current.draw(gc, x, y, RENDER_W, RENDER_H, false);
+        current.draw(gc, x, y, RENDER_W, RENDER_H);
         if (state == State.WALKING){
             gc.setFill(Color.web("#500"));
             gc.fillRect(x, y-10, RENDER_W, 5);
