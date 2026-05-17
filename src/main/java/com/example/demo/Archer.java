@@ -62,5 +62,6 @@ public class Archer {
         gc.setFill(Color.GOLD);                gc.fillRect(x, y - 10, W * arrowsLeft / MAX_ARROWS, 6);
         bullets.forEach(b -> b.draw(gc));
     }
+
 }
 
