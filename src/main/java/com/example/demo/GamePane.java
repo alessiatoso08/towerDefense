@@ -211,7 +211,7 @@ public class GamePane extends Pane {
                 monete += RICOMPENSA_NEMICO;
                 popups.add(new MoneyPopup("+" + RICOMPENSA_NEMICO, en.getCenterX() - 20, en.y - 10, Color.GOLD));
             }
-        }
+        } //riprova
         enemies.removeIf(en -> en.isDead());
         popups.forEach(MoneyPopup::update);
         popups.removeIf(p -> !p.alive());
