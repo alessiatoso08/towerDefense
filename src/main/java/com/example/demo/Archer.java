@@ -68,10 +68,8 @@ public class Archer {
         if (dead) return;
         shootAnim.draw(gc, x, y, W, H);
         // Barra frecce
-        gc.setFill(Color.web("#1a1a1a", 0.7));
-        gc.fillRect(x, y - 10, W, 6);
-        gc.setFill(Color.GOLD);
-        gc.fillRect(x, y - 10, W * arrowsLeft / MAX_ARROWS, 6);
+        gc.setFill(Color.web("#1a1a1a", 0.7)); gc.fillRect(x, y - 10, W, 6);
+        gc.setFill(Color.GOLD);                gc.fillRect(x, y - 10, W * arrowsLeft / MAX_ARROWS, 6);
         bullets.forEach(b -> b.draw(gc));
     }
 

@@ -27,7 +27,7 @@ public class GamePane extends Pane {
     private static final double GROUND_Y = 345;
 
     //  Monete
-    private static final int MONETE_INIZIO = 180;
+    private static final int MONETE_INIZIO = 250;
     private static final int COSTO_ARCIERE = 30;
     private static final int RICOMPENSA_NEMICO = 90;
     private static final int BONUS_LIVELLO = 150;
